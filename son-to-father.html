@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>子父组件通信</title>
+</head>
+<body>
+    <div id="app">
+        <Father/>
+    </div>
+    <template id="father">
+        <div>
+            <h3>父组件</h3>
+            <p>父亲的小金库有： {{ xiaoJinKu }}</p>
+            <hr>
+            <!--使用自定义事件的形式将hide这个方法绑定到子组件身上-->
+            <!--事件的名字自己随意定义-->
+            <Son @hide="hide" />
+        </div>
+    </template>
+    <template id="son">
+        <div>
+            <h4>子组件</h4>
+            <button @click="give">发红包</button>
+        </div>
+    </template>
+</body>
+<script src="vue/vue.js"></script>
+<script>
+    // 模拟一个场景，父亲节，我们往往要给父亲一个礼物（比如红包）
+    // 你 红包     给 你发出的
+    // 父亲 接受红包，然后藏到自己的私房钱小金库中
+    Vue.component('Father', {
+        template: '#father',
+        data() {
+            return {
+                xiaoJinKu: 500
+            }
+        },
+        methods: {
+            hide(value) { // value表示子组件发过来的红包
+                // 藏起来
+                this.xiaoJinKu += value
+            }
+        }
+    })
+
+    Vue.component('Son', {
+        template: '#son',
+        data() {
+            return {
+                redEnvelop: 8888
+            }
+        },
+        methods: {
+            give() {
+                // 给红包
+                this.$emit('hide', this.redEnvelop) // 这里的hide是父组件将hide绑定到子组件时(第18行)自定义的名字
+            }
+        }
+    })
+
+    new Vue({
+        el:'#app'
+    })
+</script>
+</html>
