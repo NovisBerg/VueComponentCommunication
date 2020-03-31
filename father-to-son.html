@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>父子组件通信</title>
+</head>
+<body>
+    <div id="app">
+        <Father/>
+    </div>
+    <template id="father">
+        <!--唯一根元素-->
+        <div>
+            <h3>父组件</h3>
+            <!--我们使用单项数据绑定的方式，将父组件的数据绑定到子组件身上-->
+            <!--这个属性自己定义-->
+            <Son v-bind:money="money"/>
+        </div>
+    </template>
+    <template id="son">
+        <div>
+            <h3>子组件</h3>
+            <p>父组件传递过来的数据是： {{ money }}</p>
+        </div>
+    </template>
+</body>
+<script src="vue/vue.js"></script>
+<script>
+    // 父组件 - 定义数据的
+    Vue.component('Father',{
+        template:'#father',
+        data() {
+            return {
+                money: '2000'
+            }
+        }
+    })
+
+    // 子组件 - 接收数据的
+    Vue.component('Son', {
+        template:'#son',
+        // props: ['money'] // 子组件通过props选项来接收数据，接收到的数据可以直接使用，类似直接在data选项中定义一样。
+        // 数据验证：对所接收的数据进行类型验证。如果验证出错，会在控制台显示warning，但不会阻止页面渲染。
+        props: {
+            // money: Number // 我接收的money是Number类型
+            money: {
+                validator(value) { // vue中提供了validator这个验证函数
+                    return value > 3000 // 我要的比3000块要多
+                }
+            }
+        }
+    })
+
+    new Vue({
+        el: '#app'
+    })
+</script>
+</html>
