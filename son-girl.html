@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>非父子组件通信</title>
+</head>
+<body>
+<div id="app">
+    <Father/>
+</div>
+
+<template id="father">
+    <div>
+        <Girl :fn="fn"></Girl>
+        <Son ref="son"></Son>
+    </div>
+</template>
+<template id="son">
+    <div>
+        <p v-if="flag">555555555555555</p>
+    </div>
+</template>
+<template id="girl">
+    <div>
+        <button @click="hit">揍弟弟</button>
+    </div>
+</template>
+</body>
+<script src="vue/vue.js"></script>
+<script>
+    // father son girl
+    // 模拟场景： girl 打 son，son做出的动作：哭
+    Vue.component('Father', {
+        template: '#father',
+        methods: {
+            fn() {
+                // console.log(this)
+                // 通过this.$refs.son找到son组件，里面就有changeFlag()方法
+                this.$refs.son.changeFlag()
+            }
+        }
+    })
+    
+    Vue.component('Son', {
+        template: '#son',
+        data() { // 自己的数据自己改
+            return {
+                flag: false
+            }
+        },
+        methods: {
+            changeFlag() {
+                this.flag = !this.flag // 开关的典型做法
+            }
+        }
+    })
+
+    Vue.component('Girl', {
+        template: '#girl',
+        props: ['fn'],
+        methods: {
+            hit() {
+                this.fn()
+            }
+        }
+    })
+
+    new Vue({
+        el: '#app'
+    })
+</script>
+</html>
