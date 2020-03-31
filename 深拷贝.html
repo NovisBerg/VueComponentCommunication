@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>深拷贝</title>
+</head>
+<body>
+
+</body>
+<script type="text/javascript" charset="utf-8">
+    function isType(obj, type) {
+        let flag;
+        if (typeof obj !== 'object') {
+            if (typeof obj !== type){
+                flag = false
+                return flag
+            }
+            flag = true
+            return flag
+        }
+        const typeString = Object.prototype.toString.call(obj)
+        switch(type) {
+            case "Array":
+                flag = typeString === '[object Array]'
+                break
+            case "Date":
+                flag = typeString === '[object Date]'
+                break
+            case "RegExp":
+                flag = typeString === '[object RegExp]'
+                break
+            default:
+                flag = false
+        }
+        return flag
+    }
+
+
+</script>
+</html>
