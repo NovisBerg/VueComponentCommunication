@@ -49,7 +49,7 @@
                 this.flag = !this.flag
             }
         },
-        mounted() {
+        created() { // 或者beforeMount()、mounted()
             bus.$on('beat', this.changeFlag) // 事件的定义
         }
     })
