@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件总线进行组件通信</title>
+</head>
+<body>
+<div id="app">
+    <Father></Father>
+</div>
+
+<template id="father">
+    <div>
+        <Girl></Girl>
+        <Son></Son>
+    </div>
+</template>
+
+<template id="son">
+    <div>
+        <p v-if="flag">555555555555555</p>
+    </div>
+</template>
+
+<template id="girl">
+    <div>
+        <button @click="hit">揍臭弟弟要趁早</button>
+    </div>
+</template>
+</body>
+<script src="vue/vue.js"></script>
+<script>
+    const bus = new Vue()
+    // bus上有两个重要属性：$on $emit 这两个属性来自于node events api -> EventEmitter
+
+    Vue.component('Father', {
+        template: '#father'
+    })
+
+    Vue.component('Son', {
+        template: '#son',
+        data() {
+            return {
+                flag: false
+            }
+        },
+        methods: {
+            changeFlag() {
+                this.flag = !this.flag
+            }
+        },
+        mounted() {
+            bus.$on('beat', this.changeFlag) // 事件的定义
+        }
+    })
+
+    Vue.component('Girl', {
+        template: '#girl',
+        methods: {
+            hit() {
+                bus.$emit('beat') // 事件的调用
+            }
+        }
+    })
+
+    new Vue({
+        el:'#app'
+    })
+</script>
+</html>
