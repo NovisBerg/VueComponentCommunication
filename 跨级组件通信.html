@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>provide/inject实现跨级组件通信</title>
+</head>
+<body>
+<div id="app"></div>
+</body>
+<script src="vue/vue.js"></script>
+<script>
+    /* provide/inject API主要解决了跨级组件间的通信问题，可以允许一个祖先组件向其所有子孙组件诸如一个依赖，不论组件层次有多深，并在其上下游关系成立的时间里始终生效。
+    即祖先组件通过provide来提供变量，然后在子孙组件中通过inject来注入变量。
+    不过它的使用场景主要是子组件获取上级组件的状态，跨级组件间建立了一种主动提供与依赖注入的关系。
+     */
+    Vue.component('child', {
+        inject: ['for'], // 得到父组件传递过来的数据
+        data() {
+            return {
+                mymessage: this.for
+            }
+        },
+        template: `
+            <div>
+                <input type="text" v-model="mymessage">
+            </div>
+        `
+    })
+
+    Vue.component('parent', {
+        template: `
+            <div>
+                <p>this is parent component!</p>
+                <child></child>
+            </div>
+        `,
+        provide: {
+            for: 'test'
+        },
+        // 若要provide出data中的数据可以这样写：
+        // provide: function() {
+        //     return {
+        //         for: this.message
+        //     }
+        // },
+        data() {
+            return {
+                message: 'hello'
+            }
+        }
+    })
+
+    var app = new Vue({
+        el: '#app',
+        template: `
+            <div>
+                <parent></parent>
+            </div>
+        `
+    })
+</script>
+</html>
