@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>子父组件通信测试</title>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+</body>
+<script src="../vue/vue.js"></script>
+<script>
+    Vue.component('Father', {
+        template: `
+            <div>
+                <p>This is Father component!</p>
+                <p>父组件的cash值为：{{ cash }}</p>
+                <Son @add="add"></Son>
+            </div>
+        `,
+        data() {
+            return {
+                cash: 600
+            }
+        },
+        methods: {
+            add(value) {
+                this.cash += value
+            }
+        }
+    })
+
+    Vue.component('Son', {
+        template: `
+            <div>
+                <p>This is Son component!</p>
+                <button @click='give'>给父亲1000块</button>
+            </div>
+        `,
+        data() {
+            return {
+                money: 2000
+            }
+        },
+        methods: {
+            give() {
+                this.$emit('add', this.money)
+            }
+        }
+    })
+
+    new Vue({
+        el: '#app',
+        template: `
+            <div>
+                <Father></Father>
+            </div>
+        `
+    })
+</script>
+</html>
