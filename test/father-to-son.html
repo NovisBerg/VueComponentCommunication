@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>父子组件通信测试</title>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+</body>
+<script src="../vue/vue.js"></script>
+<script>
+    Vue.component('Father', {
+        template: `
+            <div>
+                <p>This is Father component!</p>
+                <Son v-bind:money="money"></Son>
+            </div>
+        `,
+        data() {
+            return {
+                money: 2000
+            }
+        }
+    })
+
+
+    Vue.component('Son', {
+        template: `
+            <div>
+                <p>This is Son component!</p>
+                <p>{{ money }}</p>
+            </div>
+        `,
+        props: ['money']
+    })
+
+    new Vue({
+        el: '#app',
+        template: `
+            <div>
+                <Father></Father>
+            </div>
+        `
+    })
+</script>
+</html>
