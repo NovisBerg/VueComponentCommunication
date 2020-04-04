@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>利用ref与prop实现后代间通信</title>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+</body>
+<script src="../vue/vue.js"></script>
+<script>
+    Vue.component('Son', {
+        template: `
+            <div>
+                <p>This is Son component!</p>
+                <p v-if="cry">55555555555555555</p>
+            </div>
+        `,
+        data() {
+            return {
+                cry: false
+            }
+        },
+        methods: {
+            changeCry() {
+                this.cry = !this.cry
+            }
+        }
+    })
+
+    Vue.component('Girl', {
+        template: `
+            <div>
+                <p>This is Girl component!</p>
+                <button @click="hit">打臭弟弟</button>
+            </div>
+        `,
+        props: ['fn'],
+        methods: {
+            hit() {
+                this.fn()
+            }
+        }
+    })
+
+    Vue.component('Father', {
+        template:`
+            <div>
+                <p>This is Father component!</p>
+                <Girl :fn='fn'></Girl>
+                <Son ref='son'></Son>
+            </div>
+        `,
+        methods: {
+            fn() {
+                this.$refs.son.changeCry()
+            }
+        }
+    })
+
+    new Vue({
+        el: '#app',
+        template: `
+            <div>
+                <Father></Father>
+            </div>
+        `
+    })
+</script>
+</html>
